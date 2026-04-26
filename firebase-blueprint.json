@@ -1,0 +1,132 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user game progress and stats",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "characterId": { "type": "string" },
+        "mana": { "type": "number" },
+        "xp": { "type": "number" },
+        "level": { "type": "number" },
+        "floor": { "type": "number" },
+        "position": { "type": "number" },
+        "scrollsRemaining": { "type": "number" },
+        "lastCast": { "type": "array", "items": { "type": "number" } },
+        "sanctuariesOwned": { "type": "array", "items": { "type": "number" } },
+        "buildingUpgrades": { "type": "object", "additionalProperties": { "type": "number" } },
+        "unlockedSpellIds": { "type": "array", "items": { "type": "string" } },
+        "activeSpellId": { "type": "string" },
+        "seenStoryIds": { "type": "array", "items": { "type": "string" } },
+        "potions": { "type": "number" },
+        "currentWorldId": { "type": "string" },
+        "worldProgress": { 
+          "type": "object", 
+          "additionalProperties": { 
+            "type": "object", 
+            "additionalProperties": { "type": "number" } 
+          } 
+        },
+        "chronicle": { "type": "array", "items": { "type": "string" } },
+        "lastDailyReward": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["uid", "mana", "xp", "level", "position", "characterId"]
+    },
+    "Friendship": {
+      "title": "Friendship Record",
+      "description": "Links two users as friends",
+      "type": "object",
+      "properties": {
+        "uids": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["pending", "accepted"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["uids", "status"]
+    },
+    "PvPChallenge": {
+      "title": "PvP Challenge",
+      "description": "Represents a duel between two players",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "inviterId": { "type": "string" },
+        "inviterName": { "type": "string" },
+        "inviterCharacterId": { "type": "string" },
+        "inviteeId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined", "completed"] },
+        "winnerId": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "battleState": {
+          "type": "object",
+          "properties": {
+            "inviterHealth": { "type": "number" },
+            "inviteeHealth": { "type": "number" },
+            "turnId": { "type": "string" },
+            "log": { "type": "array", "items": { "type": "string" } },
+            "lastAction": { "type": "string" },
+            "lastDamage": { "type": "number" }
+          }
+        }
+      },
+      "required": ["inviterId", "inviteeId", "status"]
+    },
+    "DamageReport": {
+      "title": "Damage Report",
+      "description": "Information about an attack on a player's node.",
+      "type": "object",
+      "properties": {
+        "targetUserId": { "type": "string" },
+        "attackerName": { "type": "string" },
+        "worldId": { "type": "string" },
+        "nodeId": { "type": "string" },
+        "damage": { "type": "number" },
+        "stolenMana": { "type": "number" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["targetUserId", "attackerName", "worldId", "nodeId", "damage", "timestamp"]
+    },
+    "CoopRescue": {
+      "title": "Co-op Rescue Mission",
+      "description": "Represents a co-op mission between two players to rescue innocents",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "inviterId": { "type": "string" },
+        "inviterName": { "type": "string" },
+        "inviteeId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined", "completed"] },
+        "createdAt": { "type": "number" },
+        "bossHealth": { "type": "number" },
+        "maxBossHealth": { "type": "number" },
+        "log": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["inviterId", "inviteeId", "status", "bossHealth", "maxBossHealth"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual user data"
+    },
+    "/friendships/{friendshipId}": {
+      "schema": "Friendship",
+      "description": "Friend connections between users"
+    },
+    "/pvp_challenges/{challengeId}": {
+      "schema": "PvPChallenge",
+      "description": "Magical duels between players"
+    },
+    "/damage_reports/{reportId}": {
+      "schema": "DamageReport",
+      "description": "Reports of raid damages"
+    },
+    "/coop_rescues/{rescueId}": {
+      "schema": "CoopRescue",
+      "description": "Co-op rescue missions"
+    }
+  }
+}

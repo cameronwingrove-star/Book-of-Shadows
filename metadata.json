@@ -1,0 +1,6 @@
+{
+  "name": "Charmed: Book of Shadows",
+  "description": "Step into the shoes of the Charmed Ones. Master the Power of Three, battle the Source of All Evil, and protect the innocent in this mystical board game adventure.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["gameplay", "animations", "character-battles"]
+}

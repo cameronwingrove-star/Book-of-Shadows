@@ -1,0 +1,109 @@
+129:    battleSprite: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Prue&mouth=serious&top=longHair',
+140:    battleSprite: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Piper&mouth=smile&top=bob',
+151:    battleSprite: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Phoebe&mouth=twinkle&top=shortHair',
+162:    battleSprite: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Paige&mouth=smile&top=curly',
+246:  { id: 'mastery', name: 'Charmed Mastery', description: 'Start battles with a Shield block', cost: 5, reqs: ['dodge_1', 'power_2'], icon: 'Star', gridRow: 1, gridCol: 4 }
+889:  const [battle, setBattle] = useState<BattleState | null>(null);
+982:    { title: "Mystical Combat", content: "Be wary! Battle tiles trigger magical combat against demons. Use your spells and special abilities to vanquish them and earn rewards.", target: "battle-tile" },
+1081:    playSound('battleStart');
+1309:    playSound('battleStart');
+1368:    if (Math.random() < 0.15 && tile.type !== 'battle' && tile.type !== 'rescue' && tile.type !== 'trial' && !tile.name.includes('Chest') && tile.name !== 'Nexus') {
+1375:    } else if (tile.type === 'battle' || tile.type === 'rescue' || tile.type === 'trial' || tile.type === 'quest') {
+1428:      const bonus = battle?.battleType === 'rescue' ? 500 : battle?.battleType === 'trial' ? 1000 : 0;
+1437:          battle?.battleType === 'rescue' ? "Mortal Saved! The community offers their gratitude and Essence (Plus a Potion!)." :
+1438:          battle?.battleType === 'trial' ? "Trial Succeeded! The Elders bless you with divine Essence and Mystic Draughts." :
+1575:        // If an accepted challenge exists where we are the invitee, auto-start battle UI
+1663:    if (state.isCasting || !!battle || !!quest) return;
+1682:    if (Math.random() < 0.1 && !battle && !quest) {
+1687:          type: 'battle',
+1799:    if (!battle) return;
+1850:          battleState: {
+1868:    if (!activePvP || !activePvP.battleState || !user) return;
+1869:    if (activePvP.battleState.turnId !== user.uid) return;
+1901:    const { battleState } = activePvP;
+1902:    const newInviterHealth = Math.max(0, Math.min(100, battleState.inviterHealth + (isInviter ? heal : -damage)));
+1903:    const newInviteeHealth = Math.max(0, Math.min(100, battleState.inviteeHealth + (!isInviter ? heal : -damage)));
+1905:    const newLog = [logMsg, ...battleState.log].slice(0, 5);
+1920:        battleState: {
+1939:    if (!battle || battle.isResolvingAction) return;
+1946:      let newLog = [...battle.log];
+1947:      let newPlayerHealth = battle.playerHealth;
+1948:      let newEnemyHealth = battle.enemyHealth;
+1957:      if (battle.nexusBuffs?.magicBoost && battle.nexusBuffs.magicBoost > 0) {
+1978:        const isRescue = battle.battleType === 'rescue';
+2027:        if (battle.battleType === 'rescue') {
+2062:            chronicle: [`Fled battle. The Elders drained ALL your Essence!${repairLog}`, ...prev.chronicle]
+2085:             newLog.unshift(`Molecular Slowing! You dodged ${battle.enemyName}'s attack.`);
+2087:             newLog.unshift(`You swiftly dodged ${battle.enemyName}'s attack!`);
+2092:          const isBoss = battle.enemyName.includes('Source') || battle.enemyName.includes('Elders');
+2099:            newEnemyHealth = Math.min(battle.maxEnemyHealth, newEnemyHealth + healthStolen);
+2100:            newLog.unshift(`${battle.enemyName} uses Life Drain for ${enemyDmg} damage, healing themselves for ${healthStolen}!`);
+2104:            newLog.unshift(`${battle.enemyName} lunges at your spirit, causing ${enemyDmg} damage and weakening your magical defenses.`);
+2120:              newLog.unshift(`Demonic Smoke clouds ${battle.enemyName}'s vision! They missed.`);
+2123:              if (battle.nexusBuffs?.shield && battle.nexusBuffs.shield > 0) {
+2129:              newLog.unshift(`${battle.enemyName} strikes back for ${enemyDmg} damage.`);
+2136:      const nextBuffs = { ...battle.nexusBuffs };
+2160:          handleBattleWin(!!battle.isConquerBattle, battle.tileId);
+2179:        // Continue battle, consume mana for spell
+2830:                      <p className="text-indigo-200/60 text-xs leading-relaxed">Challenge guardians to battle for site control. Win to increase your Rank and Power.</p>
+3264:          <div id="battle-ui" key="battle-ui" className="fixed inset-0 z-[500] flex flex-col items-center p-6 bg-[#0a0a0c] overflow-hidden font-serif">
+3337:                  whileHover={!battle.isResolvingAction ? { scale: 1.1 } : {}}
+3338:                  whileTap={!battle.isResolvingAction ? { scale: 0.9 } : {}}
+3340:                    if (!battle.nexusBuffs?.magicBoost && !battle.isResolvingAction) {
+3349:                  disabled={battle.isResolvingAction}
+3350:                  className={`relative w-20 h-32 flex flex-col items-center justify-end p-4 rounded-t-full border-t-2 border-x-2 border-white/20 bg-stone-900/80 backdrop-blur-xl transition-all ${battle.nexusBuffs?.magicBoost ? 'border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.4)]' : ''} ${battle.isResolvingAction ? 'opacity-50 cursor-not-allowed' : ''}`}
+3370:                 whileHover={!battle.isResolvingAction ? { scale: 1.1 } : {}}
+3372:                   if (!battle.nexusBuffs?.shield && !battle.isResolvingAction) {
+3381:                 disabled={battle.isResolvingAction}
+3382:                 className={`w-20 h-24 bg-indigo-950/90 rounded-2xl border-2 flex items-center justify-center shadow-2xl transition-all ${battle.nexusBuffs?.shield ? 'border-cyan-400 shadow-cyan-400/30' : 'border-white/10'} ${battle.isResolvingAction ? 'opacity-50 cursor-not-allowed' : ''}`}
+3384:                 <BookOpen className={`w-10 h-10 ${battle.nexusBuffs?.shield ? 'text-cyan-400' : 'text-white/40'}`} />
+3392:                 whileHover={!battle.isResolvingAction ? { scale: 1.1 } : {}}
+3394:                    if (!battle.isResolvingAction) {
+3404:                 disabled={battle.isResolvingAction}
+3405:                 className={`w-24 h-24 bg-stone-900 border-2 border-white/10 rounded-full flex items-center justify-center shadow-2xl relative group overflow-hidden ${battle.isResolvingAction ? 'opacity-50 cursor-not-allowed' : ''}`}
+3432:               {(battle.damageDealt || battle.damageTaken) && (
+3439:                   className={`fixed inset-0 z-[200] pointer-events-none ${battle.damageTaken ? 'bg-red-900' : 'bg-white'}`}
+3442:               {battle.isResolvingAction && (
+3463:                      <p className="text-xl font-display font-black text-white drop-shadow-md">{battle.playerHealth}<span className="text-[10px] text-white/40 ml-1">/ 100</span></p>
+3469:                      animate={{ width: `${(battle.playerHealth / battle.maxPlayerHealth) * 100}%` }} 
+3470:                      className={`absolute top-0 bottom-0 left-0 ${battle.playerHealth < 30 ? 'bg-gradient-to-r from-red-600 to-red-500 animate-pulse' : 'bg-gradient-to-r from-emerald-500 to-emerald-400'}`}
+3476:                    {battle.nexusBuffs?.magicBoost && battle.nexusBuffs.magicBoost > 0 && (
+3483:                        <span className="text-[8px] font-black text-purple-200 uppercase tracking-tighter drop-shadow">Magic Boost ({battle.nexusBuffs.magicBoost}T)</span>
+3486:                    {battle.nexusBuffs?.shield && battle.nexusBuffs.shield > 0 && (
+3493:                        <span className="text-[8px] font-black text-cyan-200 uppercase tracking-tighter drop-shadow">Shield ({battle.nexusBuffs.shield}T)</span>
+3510:                     <p className="text-[10px] font-black text-rose-300 uppercase tracking-widest drop-shadow-md">{battle.enemyName}</p>
+3511:                     <p className="text-xl font-display font-black text-white drop-shadow-md">{battle.enemyHealth}</p>
+3515:                       src={battle.enemyImage || `https://api.dicebear.com/7.x/bottts/svg?seed=${battle.enemyName}`} 
+3524:                     animate={{ width: `${(battle.enemyHealth / battle.maxEnemyHealth) * 100}%` }} 
+3533:              animate={battle.damageTaken ? { x: [-10, 10, -10, 10, 0] } : battle.damageDealt ? { x: [-5, 5, -5, 5, 0] } : {}}
+3540:                   animate={battle.damageTaken ? { x: [0, -25, 25, -25, 0], filter: 'brightness(0.5) contrast(1.5) sepia(1)' } : battle.damageDealt ? { x: [0, 200, 0], scale: 1.3, filter: 'drop-shadow(0 0 20px white)' } : { y: [0, -15, 0] }}
+3541:                   transition={battle.damageDealt ? { duration: 0.3, ease: "anticipate" } : { duration: 3, repeat: Infinity, ease: "easeInOut" }}
+3545:                   {battle.nexusBuffs?.magicBoost && battle.nexusBuffs.magicBoost > 0 && (
+3554:                   {battle.nexusBuffs?.shield && battle.nexusBuffs.shield > 0 && (
+3562:                      src={selectedCharacter?.battleSprite} 
+3571:                   {battle.damageTaken && (
+3580:                     >-{battle.damageTaken}</motion.div>
+3588:                   animate={battle.damageDealt ? { x: [0, 20, -20, 20, 0], filter: 'brightness(2) contrast(1.5) sepia(1) hue-rotate(-50deg)' } : battle.damageTaken ? { x: [0, -200, 0], scale: 1.3, filter: 'drop-shadow(0 0 20px red)' } : { y: [0, 15, 0] }}
+3589:                   transition={battle.damageTaken ? { duration: 0.3, ease: "anticipate" } : { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+3595:                      src={battle.enemyImage || `https://api.dicebear.com/7.x/bottts/svg?seed=${battle.enemyName}`} 
+3603:                   {battle.damageDealt && (
+3613:                       >-{battle.damageDealt}</motion.div>
+3640:                     {battle.log.slice(0, 5).map((logEntry, i) => (
+3675:                         <SmallBattleAction label="Strike" icon={Zap} color="bg-rose-600 shadow-rose-900/40" onClick={() => executeBattleTurn('attack')} disabled={battle.isResolvingAction} />
+3676:                         <SmallBattleAction label="Spells" icon={Flame} color="bg-purple-600 shadow-purple-900/40" onClick={() => setCombatCategory('spells')} disabled={battle.isResolvingAction} />
+3677:                         <SmallBattleAction label="Meditate" icon={Heart} color="bg-cyan-600 shadow-cyan-900/40" onClick={() => executeBattleTurn('focus')} disabled={battle.isResolvingAction} />
+3678:                         <SmallBattleAction label="Items" icon={FlaskConical} color="bg-emerald-600 shadow-emerald-900/40" onClick={() => setCombatCategory('items')} disabled={battle.isResolvingAction} subtext={state.potions > 0 ? `${state.potions} Left` : 'Empty'} />
+3679:                         <SmallBattleAction label="Flee" icon={Wind} color="bg-slate-700 shadow-slate-900/40" onClick={() => setCombatCategory('retreat')} disabled={battle.isResolvingAction} />
+3707:                              disabled={battle.isResolvingAction || !isAvailable}
+3734:                          disabled={battle.isResolvingAction || state.potions <= 0}
+3759:                          disabled={battle.isResolvingAction}
+4014:        {false && activePvP && activePvP.battleState && (
+4037:                     <span>{activePvP.inviterId === user?.uid ? activePvP.battleState.inviteeHealth : activePvP.battleState.inviterHealth} HP</span>
+4041:                       animate={{ width: `${activePvP.inviterId === user?.uid ? activePvP.battleState.inviteeHealth : activePvP.battleState.inviterHealth}%` }}
+4058:                     <span>{activePvP.inviterId === user?.uid ? activePvP.battleState.inviterHealth : activePvP.battleState.inviteeHealth} HP</span>
+4062:                       animate={{ width: `${activePvP.inviterId === user?.uid ? activePvP.battleState.inviterHealth : activePvP.battleState.inviteeHealth}%` }}
+4077:                   {activePvP.battleState.log.map((entry, i) => (
+4105:                      disabled={activePvP.battleState.turnId !== user?.uid} 
+4112:                      disabled={activePvP.battleState.turnId !== user?.uid} 
+4119:                      disabled={activePvP.battleState.turnId !== user?.uid} 
+4123:                        {activePvP.battleState.turnId === user?.uid ? "YOUR TURN" : "OPPONENT'S TURN"}

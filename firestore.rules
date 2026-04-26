@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function isValidId(id) { 
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+
+    // --- User Rules ---
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn(); 
+      allow create: if isOwner(userId) && isVerified();
+      allow update: if isOwner(userId) && isVerified();
+    }
+
+    // --- Friendship Rules ---
+    match /friendships/{friendshipId} {
+      allow read: if isSignedIn() && request.auth.uid in resource.data.uids;
+      allow create: if isSignedIn() && request.auth.uid in incoming().uids;
+      allow update: if isSignedIn() && request.auth.uid in existing().uids;
+      allow delete: if isSignedIn() && request.auth.uid in existing().uids;
+    }
+
+    // --- PvP Challenge Rules ---
+    match /pvp_challenges/{challengeId} {
+      allow read: if isSignedIn() && (request.auth.uid == resource.data.inviterId || request.auth.uid == resource.data.inviteeId);
+      allow create: if isSignedIn() && request.auth.uid == incoming().inviterId;
+      allow update: if isSignedIn() && (request.auth.uid == existing().inviterId || request.auth.uid == existing().inviteeId);
+    }
+
+    // --- Damage Report Rules ---
+    match /damage_reports/{reportId} {
+      allow read: if isSignedIn() && request.auth.uid == resource.data.targetUserId;
+      allow create: if isSignedIn(); 
+    }
+
+    // --- Co-op Rescue Rules ---
+    match /coop_rescues/{rescueId} {
+      allow read: if isSignedIn() && (request.auth.uid == resource.data.inviterId || request.auth.uid == resource.data.inviteeId);
+      allow create: if isSignedIn() && request.auth.uid == incoming().inviterId;
+      allow update: if isSignedIn() && (request.auth.uid == existing().inviterId || request.auth.uid == existing().inviteeId);
+    }
+  }
+}

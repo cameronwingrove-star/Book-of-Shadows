@@ -1,0 +1,136 @@
+46:import { BOARD_CONFIG, DailyQuest, BOARD_SIZE, GameState, TileData, BattleState, QuestState, Spell, UserProfile, CharmedCharacter, PvPChallenge, GameCard, SkillNode, Achievement } from './types';
+130:    specialSpellId: 'telekinesis_blast',
+141:    specialSpellId: 'freeze_time',
+152:    specialSpellId: 'levitation_strike',
+163:    specialSpellId: 'orb_shield',
+170:const CHARMED_SPELLS: Spell[] = [
+242:  { id: 'power_1', name: 'Magical Resonance', description: '+10% Spell Damage', cost: 2, reqs: ['essence_1'], icon: 'Zap', gridRow: 4, gridCol: 4 },
+244:  { id: 'power_2', name: 'Deep Resonance', description: '+20% Spell Damage', cost: 3, reqs: ['power_1'], icon: 'Flame', gridRow: 3, gridCol: 5 },
+789:  { id: 'ring_of_power', name: 'Ring of Power', description: '+30% Spell Damage', effect: 'damage', power: 0.3, image: 'https://images.unsplash.com/photo-1614729111354-941da7d526fc?auto=format&fit=crop&q=80&w=200' },
+802:  let spellDmgMult = 1.0;
+803:  if (state.unlockedSkills?.includes('power_1')) spellDmgMult += 0.1;
+804:  if (state.unlockedSkills?.includes('power_2')) spellDmgMult += 0.2;
+815:    if (relic.effect === 'damage') spellDmgMult += relic.power;
+819:  return { maxHealth, essenceMult, spellDmgMult, dodgeChance, startWithShield };
+823:  { q: "What is the name of the book that holds the Charmed Ones' spells?", options: ["Book of Shadows", "Grimoire", "Book of Spells", "Necronomicon"], ans: 0 },
+849:    unlockedSpellIds: ['vanquishing_potion'],
+850:    activeSpellId: 'vanquishing_potion',
+902:  const [combatCategory, _setCombatCategory] = useState<'main' | 'spells' | 'items' | 'retreat' | null>(null);
+903:  const setCombatCategory = (cat: 'main' | 'spells' | 'items' | 'retreat' | null) => {
+953:  const [spellVFX, setSpellVFX] = useState<{ id: string, type: string } | null>(null);
+974:    { title: "Mystical Combat", content: "Be wary! Battle tiles trigger magical combat against demons. Use your spells and special abilities to vanquish them and earn rewards.", target: "battle-tile" },
+976:    { title: "Special Points", content: "As you progress and unlock story chapters, you earn Special Points. Use them to unlock legendary relics or powerful spell upgrades.", target: "special-points-display" }
+1007:      if (ach.id === 'first_spell' && state.lastCast) unlocked = true;
+1030:  const activeSpell = useMemo(() => {
+1031:    return CHARMED_SPELLS.find(s => s.id === state.activeSpellId) || CHARMED_SPELLS[0];
+1032:  }, [state.activeSpellId]);
+1043:        // Level reward: Unlock new spells every 3 levels
+1044:        const newUnlockedSpells = [...prev.unlockedSpellIds];
+1046:        if (nextLevel === 3 && !newUnlockedSpells.includes('freeze_time')) newUnlockedSpells.push('freeze_time');
+1047:        if (nextLevel === 6 && !newUnlockedSpells.includes('orb_shield')) newUnlockedSpells.push('orb_shield');
+1048:        if (nextLevel === 9 && !newUnlockedSpells.includes('power_of_three')) newUnlockedSpells.push('power_of_three');
+1061:          unlockedSpellIds: newUnlockedSpells,
+1078:    const activeSpell = CHARMED_SPELLS.find(s => s.id === state.activeSpellId) || CHARMED_SPELLS[0];
+1080:    const spellDmg = Math.floor(activeSpell.power * powerMult);
+1201:      state.unlockedSpellIds.forEach(spellId => {
+1202:        const spell = CHARMED_SPELLS.find(s => s.id === spellId);
+1203:        if (spell && state.mana >= spell.manaCost) {
+1205:             label: `Cast ${spell.name} (${spell.manaCost}E)`,
+1209:                 if (prev.mana >= spell.manaCost) {
+1211:                      // Spell backfires / failure
+1221:                      setCelebration({ type: 'drain', amount: essenceDrain, label: 'SPELL BACKFIRE' });
+1223:                      return { ...prev, mana: Math.max(0, prev.mana - spell.manaCost - essenceDrain), health: prev.health - failDmg, chronicle: [`The spell was repelled! Took ${failDmg} damage and lost ${essenceDrain} Essence!`, ...prev.chronicle] };
+1239:                   return { ...prev, mana: prev.mana - spell.manaCost + reward, scrollsRemaining: prev.scrollsRemaining + orbPts, health: prev.health - damageTaken, chronicle: [`${spell.name} vanquished the demon! ${dodged? 'Dodged attack!' : `Took ${damageTaken} dmg.`} (+${reward} E, +${orbPts} Orb Pts)`, ...prev.chronicle] };
+1466:              unlockedSpellIds: data.unlockedSpellIds ?? ['vanquishing_potion'],
+1467:              activeSpellId: data.activeSpellId ?? 'vanquishing_potion',
+1493:              unlockedSpellIds: ['vanquishing_potion'],
+1494:              activeSpellId: 'vanquishing_potion',
+1591:  const castSpellSteps = async (totalSteps: number) => {
+1661:        castSpellSteps(total);
+1664:    // Trigger Spell VFX
+1665:    setSpellVFX({ id: activeSpell.id, type: activeSpell.effect });
+1666:    setTimeout(() => setSpellVFX(null), 1500);
+1709:  const buySpell = (spell: Spell) => {
+1710:    if (state.scrollsRemaining >= 15 && !state.unlockedSpellIds.includes(spell.id)) {
+1711:      playSound('spell');
+1715:        unlockedSpellIds: [...prev.unlockedSpellIds, spell.id],
+1716:        chronicle: [`Mastered the spell: ${spell.name}!`, ...prev.chronicle]
+1807:      unlockedSpellIds: [...prev.unlockedSpellIds, char.specialSpellId],
+1808:      activeSpellId: char.specialSpellId
+1854:  const executePvPTurn = async (action: 'attack' | 'spell' | 'focus') => {
+1869:    if (action === 'spell') {
+1870:      playSound('spell');
+1871:      manaCost = activeSpell.manaCost;
+1874:      damage = activeSpell.power + Math.floor(Math.random() * 20);
+1875:      logMsg = `${user.displayName} casted ${activeSpell.name} for ${damage} damage!`;
+1925:  const executeBattleTurn = (action: 'attack' | 'spell' | 'focus' | 'flee' | 'item', selectedSpell?: Spell) => {
+1940:      const spellToUse = selectedSpell || (state.activeSpellId ? CHARMED_SPELLS.find(s => s.id === state.activeSpellId) : CHARMED_SPELLS[0]);
+1943:      let damageMultiplier = (1 + (state.level * 0.3)) * playerStats.spellDmgMult; // Scale with level and skills
+1948:      if (action === 'spell' && spellToUse) {
+1949:        playSound('spell');
+1950:        manaCost = spellToUse.manaCost;
+1952:          newLog.unshift("Essence is too low for this spell!");
+1957:        setSpellVFX({ id: spellToUse.id, type: spellToUse.effect });
+1958:        setTimeout(() => setSpellVFX(null), 1500);
+1960:        if (spellToUse.id === 'power_of_three') {
+1966:        if (spellToUse.effect === 'damage') {
+1967:          playerDmg = Math.floor((Math.floor(Math.random() * 25) + (spellToUse.power || 0)) * damageMultiplier);
+1972:            newLog.unshift(`${spellToUse.name}! You use your power for ${playerDmg} damage.`);
+1974:        } else if (spellToUse.effect === 'heal') {
+1975:          const heal = spellToUse.power || 0;
+1978:        } else if (spellToUse.effect === 'shield') {
+1980:           newPlayerHealth = Math.min(shieldCap, newPlayerHealth + (spellToUse.power || 0));
+1981:           newLog.unshift(`${spellToUse.name}! You protected yourself with a magical ward.`);
+1982:        } else if (spellToUse.effect === 'freeze') {
+1983:           playerDmg = Math.floor((spellToUse.power || 0) * damageMultiplier);
+1997:        setSpellVFX({ id: 'strike', type: 'damage' });
+1998:        setTimeout(() => setSpellVFX(null), 1000);
+2008:        playSound('spell');
+2009:        setSpellVFX({ id: 'vanquishing_potion', type: 'damage' });
+2010:        setTimeout(() => setSpellVFX(null), 1500);
+2149:        // Consume mana only on win for spells
+2166:        // Continue battle, consume mana for spell
+2210:  const equipSpell = (spellId: string) => {
+2211:    setState(prev => ({ ...prev, activeSpellId: spellId }));
+2215:  const getSpellBookSpells = () => {
+2216:    return CHARMED_SPELLS.filter(s => state.unlockedSpellIds.includes(s.id));
+2235:      {/* SPELL VFX OVERLAYS */}
+2237:        {spellVFX && (
+2239:            key={spellVFX.id}
+2245:            {spellVFX.id === 'telekinesis_blast' && (
+2255:            {spellVFX.id === 'freeze_time' && (
+2263:            {spellVFX.id === 'levitation_strike' && (
+2271:            {spellVFX.id === 'orb_shield' && (
+2284:            {spellVFX.id === 'vanquishing_potion' && (
+2294:            {spellVFX.id === 'strike' && (
+2305:            {spellVFX.id === 'power_of_three' && (
+2756:                                playSound('spell');
+2802:                      <h4 className="text-white font-black uppercase text-sm mb-1">CAST SPELLS</h4>
+2971:                             playSound('spell');
+3079:                  {/* SPELLS SECTION */}
+3081:                    <h3 className="text-xs font-black text-purple-300 uppercase tracking-widest border-b border-purple-300/20 pb-2 mb-6">Spells & Mystic Powers</h3>
+3083:                      {CHARMED_SPELLS.map((spell) => {
+3084:                        const isUnlocked = state.unlockedSpellIds.includes(spell.id);
+3085:                        const isActive = state.activeSpellId === spell.id;
+3086:                        const IconComp = ICON_MAP[spell.icon] || Zap;
+3090:                            key={spell.id} 
+3091:                            onClick={() => isUnlocked && equipSpell(spell.id)}
+3098:                                   <span className={`font-bold ${isUnlocked ? 'text-white' : 'text-white/30'}`}>{spell.name}</span>
+3100:                                 <span className={`text-[10px] sm:text-xs leading-tight ${isUnlocked ? 'text-indigo-200/60' : 'text-white/20'}`}>{spell.description}</span>
+3102:                                   <span className={`text-[10px] px-1.5 py-0.5 rounded leading-none font-bold ${isUnlocked ? 'bg-purple-500/20 text-purple-300' : 'bg-white/5 text-white/20'}`}>{spell.manaCost} Essence</span>
+3103:                                   {isUnlocked && <span className="text-[10px] font-bold bg-sky-500/20 text-sky-300 px-1.5 py-0.5 rounded leading-none">{spell.power} Power</span>}
+3113:                                onClick={(e) => { e.stopPropagation(); buySpell(spell); }}
+3328:                      playSound('spell');
+3360:                     playSound('spell');
+3663:                         <SmallBattleAction label="Spells" icon={Flame} color="bg-purple-600 shadow-purple-900/40" onClick={() => setCombatCategory('spells')} disabled={battle.isResolvingAction} />
+3670:                    {combatCategory === 'spells' && (
+3672:                        key="spells-menu"
+3684:                        {CHARMED_SPELLS.filter(spell => state.unlockedSpellIds.includes(spell.id)).map(spell => {
+3685:                          const isAvailable = state.mana >= spell.manaCost;
+3688:                              key={spell.id}
+3689:                              label={spell.name} 
+3690:                              icon={ICON_MAP[spell.icon] || Flame} 
+3692:                              onClick={() => { executeBattleTurn('spell', spell); setCombatCategory(null); }} 
+3693:                              subtext={isAvailable ? `-${spell.manaCost}` : `Need Mana`}
+4095:                      label={activeSpell.name.toUpperCase()} 
+4098:                      onClick={() => executePvPTurn('spell')}
